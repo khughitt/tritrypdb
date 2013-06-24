@@ -1,0 +1,10 @@
+Package: tritrypdb
+Title: tritrypdb
+Description: Functions for parsing TriTrypDB gene information files
+URL: http://www.github.com/khughitt/tritryp
+Version: 0.1.0
+Author: Keith Hughitt
+Authors@R: c(person("Keith", "Hughitt", role=c("aut", "cre"), 
+                    email="khughitt@umd.edu"))
+Maintainer: Keith Hughitt <khughitt@umd.edu>
+License: BSD_3_clause
