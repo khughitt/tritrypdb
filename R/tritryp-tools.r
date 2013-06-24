@@ -10,7 +10,7 @@
 #' available at:
 #' http://tritrypdb.org/common/downloads/Current_Release/TbruceiLister427/txt/data/TriTrypDB-5.0_TbruceiLister427Gene.txt
 #'
-parse_gene_info_table = function(filepath) {
+parse_gene_info_table = function(filepath, verbose=FALSE) {
     fp = file(filepath, open='r')
 
     # Create empty vector to store dataframe rows
@@ -33,7 +33,9 @@ parse_gene_info_table = function(filepath) {
         # Gene ID
         if(grepl("^Gene ID", x)) {
             gene_id = .get_value(x)
-            print(sprintf('Processing gene %d: %s', i, gene_id))
+            if (verbose) {
+                print(sprintf('Processing gene %d: %s', i, gene_id))
+            }
         }
 
         # Chromosome number
@@ -70,7 +72,12 @@ parse_gene_info_table = function(filepath) {
 
         # CDS length
         else if (grepl("^CDS Length", x)) {
-            cds_length = as.numeric(.get_value(x))
+            val = .get_value(x)
+            if (val == 'null') {
+                cds_length = NA
+            } else {
+                cds_length = as.numeric(val)
+            }
         }
         # Pseudogene
         else if (grepl("^Is Pseudo:", x)) {
@@ -95,12 +102,14 @@ parse_gene_info_table = function(filepath) {
     # close file pointer
     close(fp)
 
-    names(genes) = c("gene_id", "chromosome", "start", "stop", "strand",
-                     "type", "transcript_length", "cds_length",
-                     "pseudogene", "description")
+    # get ride of unallocated rows
+    genes = genes[1:i-1,]
+
+    # use gene id as row name
+    rownames(genes) = genes$gene_id
 
     # sort data frame
-    genes = genes[with(genes, order('chromosome', 'start')),]
+    genes = genes[with(genes, order(chromosome, start)),]
 
     return(genes)
 }
