@@ -109,6 +109,12 @@ parse_gene_info_table = function(filepath, verbose=FALSE) {
     # use gene id as row name
     rownames(genes) = genes$gene_id
 
+    # fix numeric types
+    for (colname in c('chromosome', 'start', 'stop', 'transcript_length',
+                      'cds_length')) {
+        genes[,colname] = as.numeric(genes[,colname])
+    }
+
     # sort data frame
     genes = genes[with(genes, order(chromosome, start)),]
 
@@ -153,7 +159,7 @@ parse_gene_go_terms = function (filepath, verbose=FALSE) {
 
         # Gene Ontology terms
         else if (grepl("^GO:", x)) {
-            go_rows[i,] = c(gene_id, head(unlist(strsplit(x, '\t')), 5))
+            go_rows[j,] = c(gene_id, head(unlist(strsplit(x, '\t')), 5))
             j = j + 1
         }
     }
@@ -162,7 +168,7 @@ parse_gene_go_terms = function (filepath, verbose=FALSE) {
     close(fp)
 
     # get ride of unallocated rows
-    go_rows = go_rows[1:j,]
+    go_rows = go_rows[1:j-1,]
 
     return(go_rows)
 }
