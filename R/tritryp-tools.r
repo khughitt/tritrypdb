@@ -4,6 +4,7 @@
 #' @author [Keith Hughitt](khughitt@umd.edu)
 #'
 #' @param filepath Location of TriTrypDB gene information table.
+#' @param verbose  Whether or not to enable verbose output.
 #' @return Returns a dataframe of gene info.
 #'
 #' An example input file is the T. brucei Lister427 gene information table
@@ -120,12 +121,50 @@ parse_gene_info_table = function(filepath, verbose=FALSE) {
 #' @author [Keith Hughitt](khughitt@umd.edu)
 #'
 #' @param filepath Location of TriTrypDB gene information table.
+#' @param verbose  Whether or not to enable verbose output.
 #' @return Returns a dataframe where each line includes a gene/GO terms pair
 #'         along with some addition information about the GO term. Note that
 #'         because each gene may have multiple GO terms, a single gene ID may
 #'         appear on multiple lines.
 #'
-parse_gene_go_terms = function () {
+parse_gene_go_terms = function (filepath, verbose=FALSE) {
+    fp = file(filepath, open='r')
+
+    # Create empty vector to store dataframe rows
+    N = 1e5
+    go_rows = data.frame(gene_id=rep("", N), go_id=rep("", N),
+                         ontology=rep("", N), go_term_name=rep("", N),
+                         source=rep("", N), evidence_code=rep("", N),
+                         stringsAsFactors=FALSE)
+
+    # Counter to keep track of row number
+    i = j = 1
+
+    # Iterate through lines in file
+    while (length(x <- readLines(fp, n=1, warn=FALSE)) > 0) {
+        # Gene ID
+        if(grepl("^Gene ID", x)) {
+            gene_id = .get_value(x)
+            if (verbose) {
+                print(sprintf('Processing gene %d: %s', i, gene_id))
+            }
+            i = i + 1
+        }
+
+        # Gene Ontology terms
+        else if (grepl("^GO:", x)) {
+            go_rows[i,] = c(gene_id, head(unlist(strsplit(x, '\t')), 5))
+            j = j + 1
+        }
+    }
+
+    # close file pointer
+    close(fp)
+
+    # get ride of unallocated rows
+    go_rows = go_rows[1:j,]
+
+    return(go_rows)
 }
 
 #
