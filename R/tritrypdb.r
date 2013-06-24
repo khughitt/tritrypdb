@@ -1,7 +1,7 @@
 #'
 #' TriTrypDB gene information table parser
 #'
-#' @author [Keith Hughitt](khughitt@umd.edu)
+#' @author Keith Hughitt
 #'
 #' @param filepath Location of TriTrypDB gene information table.
 #' @param verbose  Whether or not to enable verbose output.
@@ -124,7 +124,7 @@ parse_gene_info_table = function(filepath, verbose=FALSE) {
 #'
 #' TriTrypDB gene information table GO term parser
 #'
-#' @author [Keith Hughitt](khughitt@umd.edu)
+#' @author Keith Hughitt
 #'
 #' @param filepath Location of TriTrypDB gene information table.
 #' @param verbose  Whether or not to enable verbose output.
