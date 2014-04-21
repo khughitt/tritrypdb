@@ -15,7 +15,7 @@ parse_gene_info_table = function(filepath, verbose=FALSE) {
     require(tools)
 
     if (file_ext(filepath) == 'gz') {
-        fp = gzfile(filepath, open='r')
+        fp = gzfile(filepath, open='rb')
     } else {
         fp = file(filepath, open='r')
     }
@@ -145,7 +145,7 @@ parse_gene_go_terms = function (filepath, verbose=FALSE) {
     require(tools)
 
     if (file_ext(filepath) == 'gz') {
-        fp = gzfile(filepath, open='r')
+        fp = gzfile(filepath, open='rb')
     } else {
         fp = file(filepath, open='r')
     }
