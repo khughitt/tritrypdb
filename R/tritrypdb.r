@@ -22,7 +22,8 @@ parse_gene_info_table = function(filepath, verbose=FALSE) {
 
     # Create empty vector to store dataframe rows
     N = 2e4
-    genes = data.frame(gene_id=rep("", N), chromosome=rep(NA, N),
+    gene_ids = c()
+    genes = data.frame(chromosome=rep(NA, N),
                        start=rep(NA, N), stop=rep(NA, N),
                        strand=rep("", N), type=rep("", N),
                        transcript_length=rep(NA, N),
@@ -99,9 +100,10 @@ parse_gene_info_table = function(filepath, verbose=FALSE) {
             }
 
             # Otherwise add row to dataframe
-            genes[i,] = c(gene_id, chromosome, gene_start, gene_stop, strand,
+            genes[i,] = c(chromosome, gene_start, gene_stop, strand,
                           gene_type, transcript_length, cds_length, is_pseudo,
                           description)
+            gene_ids[i] = gene_id
             i = i + 1
         }
     }
@@ -113,7 +115,7 @@ parse_gene_info_table = function(filepath, verbose=FALSE) {
     genes = genes[1:i-1,]
 
     # use gene id as row name
-    rownames(genes) = genes$gene_id
+    rownames(genes) = gene_ids
 
     # fix numeric types
     for (colname in c('chromosome', 'start', 'stop', 'transcript_length',
@@ -148,7 +150,8 @@ parse_gene_go_terms = function (filepath, verbose=FALSE) {
 
     # Create empty vector to store dataframe rows
     N = 1e5
-    go_rows = data.frame(gene_id=rep("", N), go_id=rep("", N),
+    gene_ids = c()
+    go_rows = data.frame(go_id=rep("", N),
                          ontology=rep("", N), go_term_name=rep("", N),
                          source=rep("", N), evidence_code=rep("", N),
                          stringsAsFactors=FALSE)
@@ -169,15 +172,18 @@ parse_gene_go_terms = function (filepath, verbose=FALSE) {
 
         # Gene Ontology terms
         else if (grepl("^GO:", x)) {
-            go_rows[j,] = c(gene_id, head(unlist(strsplit(x, '\t')), 5))
+            gene_ids[j] = gene_id
+            go_rows[j,] = c(head(unlist(strsplit(x, '\t')), 5))
             j = j + 1
         }
     }
 
+    rownames(go_rows) = gene_ids
+
     # close file pointer
     close(fp)
 
-    # get ride of unallocated rows
+    # get rid of unallocated rows
     go_rows = go_rows[1:j-1,]
 
     return(go_rows)
