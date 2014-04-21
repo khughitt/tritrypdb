@@ -56,7 +56,7 @@ parse_gene_info_table = function(filepath, verbose=FALSE) {
         }
 
         # Genomic location
-        else if (grepl("^Genomic Location", x)) {
+        else if (grepl("^Genomic Location:", x)) {
             result = unlist(regmatches(x, regexec(location_regex, x)))
             gene_start = as.numeric(gsub(",", "", result[2], fixed=TRUE))
             gene_stop  = as.numeric(gsub(",", "", result[3], fixed=TRUE))
