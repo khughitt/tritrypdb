@@ -1,5 +1,3 @@
-require(tools)
-
 #'
 #' TriTrypDB gene information table parser
 #'
@@ -14,6 +12,8 @@ require(tools)
 #' http://tritrypdb.org/common/downloads/Current_Release/TbruceiLister427/txt/data/TriTrypDB-5.0_TbruceiLister427Gene.txt
 #'
 parse_gene_info_table = function(filepath, verbose=FALSE) {
+    require(tools)
+
     if (file_ext(filepath) == 'gz') {
         fp = gzfile(filepath, open='r')
     } else {
@@ -142,6 +142,8 @@ parse_gene_info_table = function(filepath, verbose=FALSE) {
 #'         appear on multiple lines.
 #'
 parse_gene_go_terms = function (filepath, verbose=FALSE) {
+    require(tools)
+
     if (file_ext(filepath) == 'gz') {
         fp = gzfile(filepath, open='r')
     } else {
