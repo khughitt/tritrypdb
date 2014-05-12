@@ -180,13 +180,14 @@ parse_gene_go_terms = function (filepath, verbose=FALSE) {
         }
     }
 
-    rownames(go_rows) = gene_ids
+    # get rid of unallocated rows
+    go_rows = go_rows[1:j-1,]
+
+    # add gene id column
+    go_rows = cbind(gene_ids, go_rows)
 
     # close file pointer
     close(fp)
-
-    # get rid of unallocated rows
-    go_rows = go_rows[1:j-1,]
 
     return(go_rows)
 }
