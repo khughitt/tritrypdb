@@ -184,7 +184,7 @@ parse_gene_go_terms = function (filepath, verbose=FALSE) {
     go_rows = go_rows[1:j-1,]
 
     # add gene id column
-    go_rows = cbind(gene_ids, go_rows)
+    go_rows = cbind(gene=gene_ids, go_rows)
 
     # close file pointer
     close(fp)
