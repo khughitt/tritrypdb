@@ -153,9 +153,9 @@ parse_gene_go_terms = function (filepath, verbose=FALSE) {
     # Create empty vector to store dataframe rows
     N = 1e5
     gene_ids = c()
-    go_rows = data.frame(go_id=rep("", N),
-                         ontology=rep("", N), go_term_name=rep("", N),
-                         source=rep("", N), evidence_code=rep("", N),
+    go_rows = data.frame(GO=rep("", N),
+                         ONTOLOGY=rep("", N), TERM=rep("", N),
+                         SOURCE=rep("", N), EVIDENCE=rep("", N),
                          stringsAsFactors=FALSE)
 
     # Counter to keep track of row number
@@ -184,7 +184,7 @@ parse_gene_go_terms = function (filepath, verbose=FALSE) {
     go_rows = go_rows[1:j-1,]
 
     # add gene id column
-    go_rows = cbind(gene=gene_ids, go_rows)
+    go_rows = cbind(GID=gene_ids, go_rows)
 
     # close file pointer
     close(fp)
